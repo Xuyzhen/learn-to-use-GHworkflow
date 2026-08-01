@@ -21,6 +21,13 @@ jobs:
           echo "$SECRET_STATUS"
           echo "Timestamp: $TIMESTAMP" > timestamp.md
           echo "$SECRET_STATUS" >> timestamp.md
+          if [ -n "${{ github.event.pull_request.number }}" ]; then
+            PR_INFO="PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+            echo "$PR_INFO"
+            echo "$PR_INFO" >> timestamp.md
+          else
+            echo "Not triggered by PR" >> timestamp.md
+          fi
           cat timestamp.md
 
       - name: Upload artifact
@@ -28,3 +35,8 @@ jobs:
         with:
           name: timestamp-artifact
           path: timestamp.md
+
+  call-c:
+    needs: build
+    uses: ./.github/workflows/workflow-c.yml
+    secrets: inherit

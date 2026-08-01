@@ -1,0 +1,29 @@
+name: Workflow C
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate timestamp and secret check file
+        env:
+          TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
+        run: |
+          C_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          if [ -z "$TEST_KEY_A" ]; then
+            C_SECRET_STATUS="C key is empty"
+          else
+            C_SECRET_STATUS="C key is not empty"
+          fi
+          echo "$C_SECRET_STATUS"
+          echo "C Timestamp: $C_TIMESTAMP" > timestamp-c.md
+          echo "$C_SECRET_STATUS" >> timestamp-c.md
+          cat timestamp-c.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: timestamp-artifact-c
+          path: timestamp-c.md
