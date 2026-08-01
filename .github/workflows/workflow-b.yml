@@ -12,7 +12,7 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Download artifact from Workflow A
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: timestamp-artifact
           run-id: ${{ github.event.workflow_run.id }}
@@ -25,7 +25,7 @@ jobs:
           cat timestamp-from-a.md
 
       - name: Upload renamed artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: timestamp-artifact-from-a
           path: timestamp-from-a.md
