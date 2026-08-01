@@ -1,0 +1,20 @@
+name: Workflow A
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate timestamp file
+        run: |
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          echo "Timestamp: $TIMESTAMP" > timestamp.md
+          cat timestamp.md
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: timestamp-artifact
+          path: timestamp.md
