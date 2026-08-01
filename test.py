@@ -40,3 +40,5 @@ cmds7 = [
     'interface GigabitEthernet0/0/3 port trunk allow-pass vlan 20',
 ]
 print('Test 7:', s.merge_cmds(cmds7))
+
+print(1)
