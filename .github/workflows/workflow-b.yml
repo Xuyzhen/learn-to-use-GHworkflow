@@ -21,13 +21,13 @@ jobs:
 
       - name: Rename and re-upload artifact
         env:
-          TEST_KEY_B: ${{ secrets.TEST_KEY_B }}
+          TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
         run: |
           mv download-artifact/timestamp.md timestamp-from-a.md
           cat timestamp-from-a.md
 
           B_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
-          if [ -z "$TEST_KEY_B" ]; then
+          if [ -z "$TEST_KEY_A" ]; then
             B_SECRET_STATUS="B key is empty"
           else
             B_SECRET_STATUS="B key is not empty"
