@@ -23,7 +23,7 @@ jobs:
         env:
           TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
         run: |
-          mv download-artifact/timestamp.md timestamp-from-a.md
+          mv download-artifact/result-one.md timestamp-from-a.md
           cat timestamp-from-a.md
 
           B_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
