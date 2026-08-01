@@ -24,11 +24,11 @@ jobs:
             C_SECRET_STATUS="C key is not empty"
           fi
           echo "$C_SECRET_STATUS"
-          echo "C Timestamp: $C_TIMESTAMP" > timestamp-c.md
-          echo "$C_SECRET_STATUS" >> timestamp-c.md
-          echo "" >> timestamp-c.md
-          echo "--- A result two (via output) ---" >> timestamp-c.md
+          echo "--- A result two (via output) ---" > timestamp-c.md
           echo "$A_RESULT_TWO" >> timestamp-c.md
+          echo "" >> timestamp-c.md
+          echo "C Timestamp: $C_TIMESTAMP" >> timestamp-c.md
+          echo "$C_SECRET_STATUS" >> timestamp-c.md
           cat timestamp-c.md
 
       - name: Upload artifact
