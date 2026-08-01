@@ -20,8 +20,22 @@ jobs:
           path: download-artifact
 
       - name: Rename and re-upload artifact
+        env:
+          TEST_KEY_B: ${{ secrets.TEST_KEY_B }}
         run: |
           mv download-artifact/timestamp.md timestamp-from-a.md
+          cat timestamp-from-a.md
+
+          B_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          if [ -z "$TEST_KEY_B" ]; then
+            B_SECRET_STATUS="B key is empty"
+          else
+            B_SECRET_STATUS="B key is not empty"
+          fi
+          echo "$B_SECRET_STATUS"
+          echo "" >> timestamp-from-a.md
+          echo "B Timestamp: $B_TIMESTAMP" >> timestamp-from-a.md
+          echo "$B_SECRET_STATUS" >> timestamp-from-a.md
           cat timestamp-from-a.md
 
       - name: Upload renamed artifact

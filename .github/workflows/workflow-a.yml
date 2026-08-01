@@ -13,9 +13,9 @@ jobs:
         run: |
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
           if [ -z "$TEST_KEY_A" ]; then
-            SECRET_STATUS="TEST_KEY_A is empty"
+            SECRET_STATUS="A key is empty"
           else
-            SECRET_STATUS="TEST_KEY_A is not empty"
+            SECRET_STATUS="A key is not empty"
           fi
           echo "$SECRET_STATUS"
           echo "Timestamp: $TIMESTAMP" > timestamp.md
