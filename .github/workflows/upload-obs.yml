@@ -1,0 +1,44 @@
+name: upload obs
+
+on:
+  workflow_run:
+    workflows: ["e2e"]
+    types:
+      - completed
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Download artifact from failure analyze
+        uses: actions/download-artifact@v8
+        with:
+          name: timestamp-artifact-fa
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: download-artifact
+
+      - name: Rename and re-upload artifact
+        env:
+          TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
+        run: |
+          mv download-artifact/timestamp-fa.md timestamp-from-fa.md
+          cat timestamp-from-fa.md
+
+          OBS_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          if [ -z "$TEST_KEY_A" ]; then
+            OBS_SECRET_STATUS="upload obs key is empty"
+          else
+            OBS_SECRET_STATUS="upload obs key is not empty"
+          fi
+          echo "$OBS_SECRET_STATUS"
+          echo "" >> timestamp-from-fa.md
+          echo "upload obs Timestamp: $OBS_TIMESTAMP" >> timestamp-from-fa.md
+          echo "$OBS_SECRET_STATUS" >> timestamp-from-fa.md
+
+      - name: Upload renamed artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: timestamp-artifact-from-fa
+          path: timestamp-from-fa.md

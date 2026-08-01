@@ -1,0 +1,45 @@
+name: read e2e
+
+on:
+  workflow_run:
+    workflows: ["e2e"]
+    types:
+      - completed
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Download artifact from e2e
+        uses: actions/download-artifact@v8
+        with:
+          name: timestamp-artifact
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: download-artifact
+
+      - name: Rename and re-upload artifact
+        env:
+          TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
+        run: |
+          mv download-artifact/result-one.md timestamp-from-e2e.md
+          cat timestamp-from-e2e.md
+
+          READ_E2E_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          if [ -z "$TEST_KEY_A" ]; then
+            READ_E2E_SECRET_STATUS="read e2e key is empty"
+          else
+            READ_E2E_SECRET_STATUS="read e2e key is not empty"
+          fi
+          echo "$READ_E2E_SECRET_STATUS"
+          echo "" >> timestamp-from-e2e.md
+          echo "read e2e Timestamp: $READ_E2E_TIMESTAMP" >> timestamp-from-e2e.md
+          echo "$READ_E2E_SECRET_STATUS" >> timestamp-from-e2e.md
+          cat timestamp-from-e2e.md
+
+      - name: Upload renamed artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: timestamp-artifact-from-e2e
+          path: timestamp-from-e2e.md
