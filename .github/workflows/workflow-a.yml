@@ -28,3 +28,8 @@ jobs:
         with:
           name: timestamp-artifact
           path: timestamp.md
+
+  call-c:
+    needs: build
+    uses: ./.github/workflows/workflow-c.yml
+    secrets: inherit
