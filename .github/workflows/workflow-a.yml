@@ -7,10 +7,19 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate timestamp file
+      - name: Generate timestamp and secret check file
+        env:
+          TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
         run: |
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+          if [ -z "$TEST_KEY_A" ]; then
+            SECRET_STATUS="TEST_KEY_A is empty"
+          else
+            SECRET_STATUS="TEST_KEY_A is not empty"
+          fi
+          echo "$SECRET_STATUS"
           echo "Timestamp: $TIMESTAMP" > timestamp.md
+          echo "$SECRET_STATUS" >> timestamp.md
           cat timestamp.md
 
       - name: Upload artifact
