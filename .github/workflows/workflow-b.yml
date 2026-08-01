@@ -14,12 +14,14 @@ jobs:
       - name: Download artifact from Workflow A
         uses: actions/download-artifact@v4
         with:
+          name: timestamp-artifact
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: download-artifact
 
       - name: Rename and re-upload artifact
         run: |
-          mv timestamp.md timestamp-from-a.md
+          mv download-artifact/timestamp.md timestamp-from-a.md
           cat timestamp-from-a.md
 
       - name: Upload renamed artifact
