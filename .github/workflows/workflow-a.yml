@@ -7,8 +7,11 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      result-two: ${{ steps.generate.outputs.result_two }}
     steps:
       - name: Generate timestamp and secret check file
+        id: generate
         env:
           TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
         run: |
@@ -19,24 +22,44 @@ jobs:
             SECRET_STATUS="A key is not empty"
           fi
           echo "$SECRET_STATUS"
-          echo "Timestamp: $TIMESTAMP" > timestamp.md
-          echo "$SECRET_STATUS" >> timestamp.md
+
+          echo "Timestamp: $TIMESTAMP" > result-one.md
+          echo "$SECRET_STATUS" >> result-one.md
           if [ -n "${{ github.event.pull_request.number }}" ]; then
             PR_INFO="PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
             echo "$PR_INFO"
-            echo "$PR_INFO" >> timestamp.md
+            echo "$PR_INFO" >> result-one.md
           else
-            echo "Not triggered by PR" >> timestamp.md
+            echo "Not triggered by PR" >> result-one.md
           fi
-          cat timestamp.md
+          echo "[Delivered via artifact]" >> result-one.md
+          cat result-one.md
+
+          echo "Timestamp: $TIMESTAMP" > result-two.md
+          echo "$SECRET_STATUS" >> result-two.md
+          if [ -n "${{ github.event.pull_request.number }}" ]; then
+            echo "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}" >> result-two.md
+          else
+            echo "Not triggered by PR" >> result-two.md
+          fi
+          echo "[Delivered via output]" >> result-two.md
+          cat result-two.md
+
+          {
+            echo "result_two<<EOF"
+            cat result-two.md
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v7
         with:
           name: timestamp-artifact
-          path: timestamp.md
+          path: result-one.md
 
   call-c:
     needs: build
     uses: ./.github/workflows/workflow-c.yml
+    with:
+      result-two: ${{ needs.build.outputs.result-two }}
     secrets: inherit
