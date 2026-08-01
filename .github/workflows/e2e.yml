@@ -1,4 +1,4 @@
-name: Workflow A
+name: e2e
 
 on:
   workflow_dispatch:
@@ -17,9 +17,9 @@ jobs:
         run: |
           TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
           if [ -z "$TEST_KEY_A" ]; then
-            SECRET_STATUS="A key is empty"
+            SECRET_STATUS="e2e key is empty"
           else
-            SECRET_STATUS="A key is not empty"
+            SECRET_STATUS="e2e key is not empty"
           fi
           echo "$SECRET_STATUS"
 
@@ -57,9 +57,9 @@ jobs:
           name: timestamp-artifact
           path: result-one.md
 
-  call-c:
+  call-failure-analyze:
     needs: build
-    uses: ./.github/workflows/workflow-c.yml
+    uses: ./.github/workflows/failure-analyze.yml
     with:
       result-two: ${{ needs.build.outputs.result-two }}
     secrets: inherit
