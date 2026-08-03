@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Generate timestamp and secret check file
+      - name: Generate failure analysis report
         env:
           TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
           E2E_RESULT_TWO: ${{ inputs.result-two }}
@@ -24,15 +24,18 @@ jobs:
             FA_SECRET_STATUS="failure analyze key is not empty"
           fi
           echo "$FA_SECRET_STATUS"
-          echo "--- e2e result two (via output) ---" > timestamp-fa.md
-          echo "$E2E_RESULT_TWO" >> timestamp-fa.md
-          echo "" >> timestamp-fa.md
-          echo "failure analyze Timestamp: $FA_TIMESTAMP" >> timestamp-fa.md
-          echo "$FA_SECRET_STATUS" >> timestamp-fa.md
-          cat timestamp-fa.md
+          mkdir -p failure-analysis-report
+          REPORT_PATH="failure-analysis-report/failure_report.md"
+          echo "--- e2e result two (via output) ---" > "$REPORT_PATH"
+          echo "$E2E_RESULT_TWO" >> "$REPORT_PATH"
+          echo "" >> "$REPORT_PATH"
+          echo "failure analyze Timestamp: $FA_TIMESTAMP" >> "$REPORT_PATH"
+          echo "$FA_SECRET_STATUS" >> "$REPORT_PATH"
+          cat "$REPORT_PATH"
 
-      - name: Upload artifact
+      - name: Upload failure analysis report
         uses: actions/upload-artifact@v7
         with:
-          name: timestamp-artifact-fa
-          path: timestamp-fa.md
+          name: failure-analysis-report
+          path: failure-analysis-report/
+          if-no-files-found: error

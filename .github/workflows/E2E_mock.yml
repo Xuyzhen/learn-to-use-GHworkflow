@@ -57,18 +57,6 @@ jobs:
           name: timestamp-artifact
           path: result-one.md
 
-      - name: Generate failure analysis report for OBS
-        run: |
-          mkdir -p failure-analysis-report
-          cp result-one.md failure-analysis-report/failure_report.md
-
-      - name: Upload failure analysis report
-        uses: actions/upload-artifact@v7
-        with:
-          name: failure-analysis-report
-          path: failure-analysis-report/
-          if-no-files-found: error
-
   call-failure-analyze:
     needs: build
     uses: ./.github/workflows/failure-analyze.yml
