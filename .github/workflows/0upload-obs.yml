@@ -1,4 +1,4 @@
-name: upload obs
+name: upload obs fake
 
 on:
   workflow_run:
