@@ -67,6 +67,7 @@ jobs:
         with:
           name: failure-analysis-report
           path: failure-analysis-report/
+          if-no-files-found: error
 
   call-failure-analyze:
     needs: build
