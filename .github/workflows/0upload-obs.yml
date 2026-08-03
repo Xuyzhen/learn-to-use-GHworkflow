@@ -1,8 +1,8 @@
-name: upload obs
+name: upload obs fake
 
 on:
   workflow_run:
-    workflows: ["e2e"]
+    workflows: ["e2efake"]
     types:
       - completed
 

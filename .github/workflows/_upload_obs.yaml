@@ -43,7 +43,7 @@ jobs:
       OBS_SECRET_KEY: ${{ secrets.OBS_SECRET_ACCESS_KEY_PRECISION }}
       PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number || 'unknown' }}
       PR_TITLE: ${{ github.event.workflow_run.pull_requests[0].title || 'untitled' }}
-      RUN_ID: ${{ github.event.workflow_run.id }}
+      RUN_ID: $30804332343
       RUN_ATTEMPT: ${{ github.event.workflow_run.run_attempt }}
     steps:
       - name: Download failure analysis report
