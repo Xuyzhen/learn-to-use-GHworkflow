@@ -43,3 +43,4 @@ print('Test 7:', s.merge_cmds(cmds7))
 
 print(2)
 print(3)
+print(4)
