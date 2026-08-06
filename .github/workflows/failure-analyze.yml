@@ -16,6 +16,8 @@ jobs:
         env:
           TEST_KEY_A: ${{ secrets.TEST_KEY_A }}
           E2E_RESULT_TWO: ${{ inputs.result-two }}
+          PR_NUMBER: ${{ github.event.pull_request.number || 'unknown' }}
+          PR_TITLE: ${{ github.event.pull_request.title || 'untitled' }}
         run: |
           FA_TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
           if [ -z "$TEST_KEY_A" ]; then
@@ -31,6 +33,10 @@ jobs:
           echo "" >> "$REPORT_PATH"
           echo "failure analyze Timestamp: $FA_TIMESTAMP" >> "$REPORT_PATH"
           echo "$FA_SECRET_STATUS" >> "$REPORT_PATH"
+          echo "" >> "$REPORT_PATH"
+          echo "## Pull request" >> "$REPORT_PATH"
+          echo "PR number: $PR_NUMBER" >> "$REPORT_PATH"
+          echo "PR title: $PR_TITLE" >> "$REPORT_PATH"
           cat "$REPORT_PATH"
 
       - name: Upload failure analysis report
