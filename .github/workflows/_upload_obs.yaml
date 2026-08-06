@@ -18,8 +18,7 @@ name: Upload OBS
 
 run-name: >-
   Upload failure report for PR
-  #${{ github.event.workflow_run.pull_requests[0].number || 'unknown' }} -
-  ${{ github.event.workflow_run.display_title }}
+  #${{ github.event.workflow_run.display_title }}
 
 
 on:
